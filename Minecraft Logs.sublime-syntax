@@ -1,0 +1,77 @@
+%YAML 1.2
+---
+# See http://www.sublimetext.com/docs/3/syntax.html
+file_extensions:
+  - log
+  - txt
+scope: source.example-c
+contexts:
+  main:
+    # Strings begin and end with quotes, and use backslashes as an escape
+    # character
+
+    - match: '\b[0-9_.forSNAPSHOT]*.[0-9_.]*.[0-9_]*[0-9]'
+      scope: constant.numeric.example-c
+    # Comments begin with a '//' and finish at the end of the line
+    - match: '(--|//)[A-Za-z_0-9.($: .<>''!?#@%&^]*'
+      scope: comment
+    # Keywords are if, else for and while.
+    # Note that blackslashes don't need to be escaped within single quoted
+    # strings in YAML. When using single quoted strings, only single quotes
+    # need to be escaped: this is done by using two single quotes next to each
+    # other.
+    - match: '\b(Launcher/monitor \(Process Monitor\))? Fatal Process crashed with exit code\b'
+      scope: invalid.illegal.stray-semi-colon
+    - match: '\b(Client thread|Server thread|[A-Za-z_0-9 -]*)/(ERROR|FATAL)\b'
+      scope: invalid.illegal.stray-semi-colon
+    - match: '\b(Client thread|Server thread|[A-Za-z_0-9 -]*)/INFO\b'
+      scope: string
+    - match: '\b(Client thread|Server thread|[A-Za-z_0-9 -]*)/WARN\b'
+      scope: keyword.other
+    # - match: '\bBuilt for minecraft version [0-9.].[0-9.][0-9.].[0-9.]\b'
+    #   scope: keyword.other
+    - match: '\bBuilt for minecraft version [0-9.]*'
+      scope: entity.name
+    - match: '\b[UCHIJAL]*E \|'
+      scope: keyword.illegal.stray-semi-colon
+    - match: '\b\| [UCHIJAL]*E \|'
+      scope: keyword.illegal.stray-semi-colon
+    # - match: '\b[UCHIJAL]*'
+    #   scope: entity.name
+    - match: '\b| [A-Za-z_0-9.($: \[ \] -- .<>''!?#@%&^]*.jar |'
+      scope: entity.name
+    - match: '\bMinecraft Version: [0-9.]*'
+      scope: string
+
+
+
+    - match: '\b(Java Version|Operating System|Java VM Version|Memory|FML|JVM Flags|IntCache|Details|OpenGL|LWJGL|Using VBOs|Is Modded|GL Caps|Launched Version|Resource Packs|Current Language|CPU|Type|Profiler Position)(sing|haders|BOs|:) [A-Za-z_0-9.(: --=,;/~#@)]*'
+      scope: string
+    - match: '\b(Stacktrace|Details):'
+      scope: string
+    - match: '\b(Screen name: [A-Za-z_0-9.(: --=,;/~)]*)'
+      scope: constant.numeric
+    - match: '\bDescription: [A-Za-z_0-9.($: .<>''!?#@%&^]*'
+      scope: string
+    - match: 'Time: [A-Z0-9.:''/ -- ]*'
+      scope: constant.numeric.example-c
+    - match: 'A detailed walkthrough of the error, its code path and all known details is as follows:'
+      scope:  entity.name
+
+
+
+    - match: '\bat (net|java|[A-Za-z_$]*).[A-Za-z_$]*.[A-Za-z_0-9.($: .<>]*\b'
+      scope: keyword.other
+    - match: '\b Ambiguity between arguments [A-Za-z_0-9.($:, .<> \[\] ]*\b'
+      scope: keyword.other
+    - match: '\bjava.[A-Za-z_$]*.[A-Za-z_0-9.($: .<>]*\b'
+      scope: keyword.other
+    # Numbers
+    - match: '\b(-)?[0-9.]+:+[0-9.]+:+[0-9.]+\b'
+      scope: constant.numeric.example-c
+    - match: '(minecraft|[A-Za-z_]*):(block|item|blockstates|models|models/block|models/items)/[A-Za-z_/]*.[A-Za-z_/]*\b'
+      scope: constant.numeric.example-c
+    - match: '(minecraft|[A-Za-z_0-9.($: .<>+_ - ]*).zip\b'
+      scope: constant.numeric.example-c
+
+
