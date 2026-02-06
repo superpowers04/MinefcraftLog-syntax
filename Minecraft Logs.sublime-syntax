@@ -1,6 +1,8 @@
 %YAML 1.2
 ---
 # See http://www.sublimetext.com/docs/3/syntax.html
+name: Minecraft Log File
+first_line_match: '(Prism Launcher version|\[\d\d:\d\d:\d\d\] \[main/INFO\]):'
 file_extensions:
   - log
   - txt
@@ -10,68 +12,76 @@ contexts:
     # Strings begin and end with quotes, and use backslashes as an escape
     # character
 
-    - match: '\b[0-9_.forSNAPSHOT]*.[0-9_.]*.[0-9_]*[0-9]'
+    - match: '[0-9_.forSNAPSHOT]*\.[0-9_.]*\.[0-9_]*[0-9]'
       scope: constant.numeric.example-c
     # Comments begin with a '//' and finish at the end of the line
-    - match: '(--|//)[A-Za-z_0-9.($: .<>''!?#@%&^]*'
+    - match: '//[A-Za-z_0-9.($: .<>''!?#@%&^]*'
       scope: comment
-    # Keywords are if, else for and while.
-    # Note that blackslashes don't need to be escaped within single quoted
-    # strings in YAML. When using single quoted strings, only single quotes
-    # need to be escaped: this is done by using two single quotes next to each
-    # other.
-    - match: '\b(Launcher/monitor \(Process Monitor\))? Fatal Process crashed with exit code\b'
+    - match: '(Fatal )?Process (crashed|exited) with( exit)? code \d*'
       scope: invalid.illegal.stray-semi-colon
-    - match: '\b(Client thread|Server thread|[A-Za-z_0-9 -]*)/(ERROR|FATAL)\b'
+    - match: 'Unrecognized VM option'
       scope: invalid.illegal.stray-semi-colon
-    - match: '\b(Client thread|Server thread|[A-Za-z_0-9 -]*)/INFO\b'
+    - match: '(Client thread|Server thread|[A-Za-z_0-9 -]*)/(ERROR|FATAL)'
+      scope: invalid.illegal.stray-semi-colon
+    - match: '(Client thread|Server thread|[A-Za-z_0-9 -]*)/INFO'
       scope: string
-    - match: '\b(Client thread|Server thread|[A-Za-z_0-9 -]*)/WARN\b'
+    - match: '(Client thread|Server thread|[A-Za-z_0-9 -]*)/WARN'
       scope: keyword.other
-    # - match: '\bBuilt for minecraft version [0-9.].[0-9.][0-9.].[0-9.]\b'
+    # - match: 'Built for minecraft version [0-9.].[0-9.][0-9.].[0-9.]'
     #   scope: keyword.other
-    - match: '\bBuilt for minecraft version [0-9.]*'
+    - match: '\r'
+      scope: comment
+
+    - match: '  \[✘\].*'
+      scope: comment
+    - match: '  \[✔\].*'
       scope: entity.name
-    - match: '\b[UCHIJAL]*E \|'
-      scope: keyword.illegal.stray-semi-colon
-    - match: '\b\| [UCHIJAL]*E \|'
-      scope: keyword.illegal.stray-semi-colon
-    # - match: '\b[UCHIJAL]*'
-    #   scope: entity.name
-    - match: '\b| [A-Za-z_0-9.($: \[ \] -- .<>''!?#@%&^]*.jar |'
+    - match: 'Built for minecraft version [0-9.]*'
       scope: entity.name
-    - match: '\bMinecraft Version: [0-9.]*'
+    - match: '[UCHIJAL]*E \|'
+      scope: keyword.illegal.stray-semi-colon
+    - match: '\| [UCHIJAL]*E \|'
+      scope: keyword.illegal.stray-semi-colon
+    - match: '/?([A-Za-z_0-9.($:\[ \]\-.<>+''!?#@%&^]*)([_0-9+]*)\.jar'
+      scope: entity.name
+      captures:
+        2: string
+    - match: 'Minecraft Version: [0-9.]*'
       scope: string
 
 
 
-    - match: '\b(Java Version|Operating System|Java VM Version|Memory|FML|JVM Flags|IntCache|Details|OpenGL|LWJGL|Using VBOs|Is Modded|GL Caps|Launched Version|Resource Packs|Current Language|CPU|Type|Profiler Position)(sing|haders|BOs|:) [A-Za-z_0-9.(: --=,;/~#@)]*'
+    - match: '^([a-zA-Z0-9][a-zA-Z .0-9]*:)$'
       scope: string
-    - match: '\b(Stacktrace|Details):'
+    - match: '(Java Version|Operating System|Java VM Version|Memory|FML|JVM Flags|IntCache|Details|OpenGL|LWJGL|Using VBOs|Is Modded|GL Caps|Launched Version|Resource Packs|Current Language|CPU|Type|Profiler Position)(sing|haders|BOs|:) [A-Za-z_0-9.(: --=,;/~#@)]*'
       scope: string
-    - match: '\b(Screen name: [A-Za-z_0-9.(: --=,;/~)]*)'
+    - match: '(Stacktrace|Details):'
+      scope: string
+    - match: '(Screen name: [A-Za-z_0-9.(: --=,;/~)]*)'
       scope: constant.numeric
-    - match: '\bDescription: [A-Za-z_0-9.($: .<>''!?#@%&^]*'
+    - match: 'Description: [A-Za-z_0-9.($: .<>''!?#@%&^]*'
       scope: string
     - match: 'Time: [A-Z0-9.:''/ -- ]*'
       scope: constant.numeric.example-c
-    - match: 'A detailed walkthrough of the error, its code path and all known details is as follows:'
-      scope:  entity.name
 
 
 
-    - match: '\bat (net|java|[A-Za-z_$]*).[A-Za-z_$]*.[A-Za-z_0-9.($: .<>]*\b'
+    - match: '(\t|  )at (net|java|TRANSFORMER|MC\-[a-zA-Z]*|[A-Za-z_$]*)[./].*'
       scope: keyword.other
-    - match: '\b Ambiguity between arguments [A-Za-z_0-9.($:, .<> \[\] ]*\b'
+    - match: ' Ambiguity between arguments [A-Za-z_0-9.()@$:, .<> \[\] ]*'
       scope: keyword.other
-    - match: '\bjava.[A-Za-z_$]*.[A-Za-z_0-9.($: .<>]*\b'
+    - match: 'java\.[A-Za-z_$]*\.[A-Za-z_0-9.($: .<>]*'
       scope: keyword.other
     # Numbers
-    - match: '\b(-)?[0-9.]+:+[0-9.]+:+[0-9.]+\b'
+    - match: '(-)?[0-9.]+:+[0-9.]+:+[0-9.]+'
       scope: constant.numeric.example-c
-    - match: '(minecraft|[A-Za-z_]*):(block|item|blockstates|models|models/block|models/items)/[A-Za-z_/]*.[A-Za-z_/]*\b'
+    - match: '(minecraft|[A-Za-z_]*):(block|item|blockstates|models|models/block|models/items)/[A-Za-z_/]*.[A-Za-z_/]*'
       scope: constant.numeric.example-c
-    - match: '(minecraft|[A-Za-z_0-9.($: .<>+_ - ]*).zip\b'
+    - match: '(minecraft|[A-Za-z_0-9.($: .<>+_ - ]*).zip'
       scope: constant.numeric.example-c
 
 
+
+
+    - match: '(gg\.essential)'
+      scope: keyword.illegal.stray-semi-colon
